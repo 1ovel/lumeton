@@ -1,30 +1,35 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet } from "react-native";
+import { Camera, CameraType } from "expo-camera";
+import React, { useEffect, useState } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import * as Location from 'expo-location';
-
+import * as Location from "expo-location";
 
 const MapScreen = () => {
   const [location, setLocation] = useState(null);
+  
   useEffect(() => {
     (async () => {
-      
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Error loading location')
+      if (status !== "granted") {
+        console.error("Permission to access location was denied");
         return;
       }
-
-      let location = await Location.getCurrentPositionAsync({});
-      const coordinates = {
-        longitude: location.coords.longitude,
-        latitude: location.coords.latitude,
-      }
-      setLocation(coordinates);
+      const foregroundSubscrition = Location.watchPositionAsync(
+        {
+          // Tracking options
+          accuracy: Location.Accuracy.High,
+          distanceInterval: 5,
+        },
+        (location) => {
+          const coordinates = {
+            longitude: location.coords.longitude,
+            latitude: location.coords.latitude,
+          };
+          setLocation(coordinates);
+        }
+      );
     })();
   }, []);
-
-  console.log(location)
 
   return (
     <View style={styles.container}>
@@ -33,19 +38,34 @@ const MapScreen = () => {
         //specify our coordinates.
         provider={PROVIDER_GOOGLE}
         initialRegion={{
-          // longitude: location ? 24.93626160750431 : location?.longitude, 
-          // latitude: location ? 60.179599016239166 : location?.latitude,
-          longitude: 24.93626160750431, 
+          longitude: 24.93626160750431,
           latitude: 60.179599016239166,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        region={
+          location && {
+            longitude: location.longitude,
+            latitude: location.latitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }
+        }
       >
-        {location && <Marker coordinate={location}/>}
+        {location && (
+          <Marker
+            coordinate={{
+              longitude: location ? location?.longitude : 24.93626160750431,
+              latitude: location ? location?.latitude : 60.179599016239166,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+        )}
       </MapView>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -59,5 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export default MapScreen
+export default MapScreen;

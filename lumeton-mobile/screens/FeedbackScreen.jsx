@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import ConditionsList from "../components/ConditionsList";
@@ -21,25 +21,29 @@ const FeedbackScreen = ({ route }) => {
   const [selectedSnowCondition, setSelectedSnowCondition] = useState(null);
   const [selectedIceCondition, setSelectedIceCondition] = useState(null);
   const [description, setDescription] = useState("");
+	const [locPhoto, setLocPhoto] = useState(null)
+
+	useEffect(()=>{setLocPhoto(photo)}, [photo])
 
   const sendData = async () => {
-    // try {
-      fetch("http://localhost:8000/api/health")
-        .then((response) => console.log(response))
-        .catch((e) => console.log(e));
-      // const imageUrl = await sendPhoto(photo)
-      //
-      // const loca = {feedback: description, imageUrl, snowDepth: selectedSnowCondition, weatherConditions: selectedIceCondition}
-      //
-      // const savedLoca = await sendLoca(loca)
-      //
-      // return savedLoca
-    // } catch (e) {
-    //   console.error(e.message);
-    // }
-  };
+    try {
 
-  console.log(photo);
+      const imageUrl = await sendPhoto(locPhoto);
+
+      const loca = {
+        feedback: description,
+        imageUrl,
+        snowDepth: selectedSnowCondition,
+        weatherConditions: selectedIceCondition,
+      };
+
+      const savedLoca = await sendLoca(loca);
+
+      return savedLoca;
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>

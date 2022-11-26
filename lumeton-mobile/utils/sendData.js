@@ -1,10 +1,20 @@
 import axios from "axios";
 
 const sendPhoto = async (photo) => {
-  const form = new FormData();
+  const config = {
+    headers: { "content-type": "multipart/form-data" },
+  };
+
+  let form = new FormData();
   form.append("file", photo);
+	
   try {
-    const photoUrl = await axios.post("127.0.0.1:8000/api/image", form);
+    console.log(form._parts);
+    const photoUrl = await axios.post(
+      "https://silent-lemons-lick-93-106-187-207.loca.lt/api/image",
+      form,
+      config
+    );
 
     return photoUrl;
   } catch (e) {
@@ -14,7 +24,10 @@ const sendPhoto = async (photo) => {
 };
 
 const sendLoca = async (loca) => {
-  return await axios.post("127.0.0.1:8000/api/loca", loca);
+  return await axios.post(
+    "https://silent-lemons-lick-93-106-187-207.loca.lt/api/loca",
+    loca
+  );
 };
 
 export { sendPhoto, sendLoca };

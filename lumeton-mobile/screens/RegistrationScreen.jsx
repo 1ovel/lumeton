@@ -6,6 +6,7 @@ import {
   TextInput,
 } from "react-native";
 import { SvgUri } from "react-native-svg";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import TopFlowBg from "../assets/TopFlowBg.svg";
 import BottomFlowBg from "../assets/BottomFlowBg.svg";
@@ -15,7 +16,9 @@ import ContinueIcon from "../assets/ContinueIcon.svg";
 // You use views for styling and positioning your components.
 // And you use text for displaying text.
 const RegistrationScreen = () => {
-  const [text, onChangeText] = React.useState("");
+  const [username, onChangeUsername] = React.useState("");
+  const navigation = useNavigation()
+
   return (
     <View style={{ justifyContent: "space-between", height:"100%"}}>
       <TopFlowBg width={"100%"} />
@@ -26,11 +29,11 @@ const RegistrationScreen = () => {
         </View>
         <View style={s.registerArea}>
           <Text>Tell us your username:</Text>
-          <TextInput style={s.input} onChangeText={onChangeText} value={text} />
+          <TextInput style={s.input} onChangeText={onChangeUsername} value={username} />
         </View>
         <View style={s.continueArea}>
           <Text>Let's start our snowy adventure!</Text>
-          <TouchableOpacity style={s.continueButton}>
+          <TouchableOpacity onPress={()=>navigation.navigate("Map")} style={[s.continueButton, username!="" ? s.allowContinue : '']}>
             {/* <Text style={{ color: 'white', fontWeight: '600', fontSize: 20 }}>Report</Text> */}
 
             <ContinueIcon />
@@ -84,8 +87,8 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   continueButton: {
-    width: 150,
-    height: 120,
+    width: 180,
+    height: 140,
     backgroundColor: "#003380",
     justifyContent: "center",
     alignItems: "center",
@@ -93,7 +96,11 @@ const s = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     marginTop: 20,
+    opacity:0.2
   },
+  allowContinue:{
+    opacity:1
+  }
 });
 
 export default RegistrationScreen;

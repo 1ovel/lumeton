@@ -23,7 +23,6 @@ const CameraScreen = ({ route }) => {
       navigation.navigate('Feedback', { photo: photo, location: location })
     }});
   };
-
   return (
     <View style={{ flex: 1 }}>
       <Camera ref={cameraRef} style={{ flex: 1, width: "100%" }}>

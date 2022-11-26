@@ -2,7 +2,7 @@ import pymongo as pym
 import certifi
 from fastapi import UploadFile
 from azure.storage.blob import BlobServiceClient
-
+import math
 
 # Function to upload an image file to Azure Storage Account
 async def uploadtoazure(file: UploadFile,
@@ -51,12 +51,12 @@ def order_by_distance(item):
 
 def assess_places(item):
     mark = 0
-    with_org.sort(key=order_by_distance)
+    item.sort(key=order_by_distance)
     for i in range(3):
-        if with_org[i].distance <= 100:
+        if item[i].distance <= 100:
             mark += 1/3
-        elif with_org[i].distance > 100 and with_org[i].distance < 300:
-            mark +=  1/3 * (1 - ((with_org[i].distance - 100)*5/1000))
+        elif item[i].distance > 100 and item[i].distance < 300:
+            mark +=  1/3 * (1 - ((item[i].distance - 100)*5/1000))
     return mark
     
 class Organization:

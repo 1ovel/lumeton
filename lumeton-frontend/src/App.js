@@ -1,5 +1,4 @@
 import "./App.css";
-import { GoogleMap, Marker } from "react-google-maps";
 import MapComponent from "./components/Map";
 import { useState } from "react";
 

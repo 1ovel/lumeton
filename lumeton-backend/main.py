@@ -5,9 +5,11 @@ import json
 import utils
 from utils import measure, order_by_distance, assess_places, Organization
 import classes
-from random import random   
+import random   
 from shapely.geometry import shape, Point
 import numpy as np
+from fastapi.middleware.cors import CORSMiddleware
+
 
 accessibility_critical = json.load(open('./data/accessibility_critical.json'))
 hsl_bus_stops = json.load(open('./data/hsl_bus_stops.json'))['data']['stopsByBbox']
@@ -18,6 +20,21 @@ app = FastAPI()
 coll = utils.db_connect()
 container_client = utils.azure_connect()
 
+
+origins = [
+    "localhost",
+    "http://localhost:3000"
+    "localhost:3000",
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Health Check route
 @app.get("/api/health")
 def read_root():
@@ -66,10 +83,10 @@ def read_item():
 
 @app.get("/api/summary")
 def data_summary():
-# assessment criteria is random since we don't have the actual data
     main_feedback = []
+    # assessment criteria such as user measure are random since we don't have the data regardin the depth of the snow or the amount of ice. Road class measure could be extracted, however, there was not enough time to do that. 
     for feedback_instance in actual_feedback:
-        main_feedback.append({"lat":feedback_instance['Lat'], "lon":feedback_instance['Lon'], "user_assessment":random(), "road_class_assessment":random()*1.5})
+        main_feedback.append({"feedback_id":uuid.uuid4, "lat":feedback_instance['Lat'], "lon":feedback_instance['Lon'], "user_measure":random.random(), "snow_depth":random.randint(2, 50), "ice":random.randint(1,3), "road_class_measure":random.random()*1.5, "description":feedback_instance['Message']})
     access_points = np.array(list((place['latitude'], place['longitude']) for place in accessibility_critical))
     bus_points = np.array(list((place['lat'], place['lon']) for place in hsl_bus_stops))
         
@@ -80,17 +97,19 @@ def data_summary():
             with_org.append(Organization(accessibility_critical[i]['org_id'],
             measure(interest_point[0],interest_point[1], access_points[i][0], access_points[i][1])))
         # so finally
-        feedback_instance['placesmeasure'] = assess_places(with_org)
+        feedback_instance['places_measure'] = assess_places(with_org)
         closest_bus = 100000
         for bus_stop in bus_points:
             cur_bus = measure(interest_point[0],interest_point[1], bus_stop[0], bus_stop[1])
             if cur_bus < closest_bus:
                 closest_bus = cur_bus
         bus_mark = 0
-        print(closest_bus)
         if closest_bus <= 80:
             bus_mark = 1
         elif closest_bus > 80 and closest_bus < 160:
             bus_mark = 1/3 * (1 - ((closest_bus - 80)*1.25/100))
         feedback_instance['bus_measure'] =  bus_mark
-        print(main_feedback)
+        feedback_instance['final_urgency'] = 0.5 * feedback_instance['places_measure'] + 0.15 * feedback_instance['road_class_measure'] + 0.20 * feedback_instance['user_measure'] + 0.15* feedback_instance['bus_measure']
+    return main_feedback
+
+        

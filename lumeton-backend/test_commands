@@ -1,0 +1,5 @@
+curl -X POST http://127.0.0.1:8000/api/loca -d '{"id": "test", "coordinates": {"lat": 12, "lon": 13}, "imageUrl": "https://paskaton.blob.core.windows.net/paskatoncontainer/17d556e0-7ceb-43c4-80f1-d6c5d614ac2a.jpg", "weatherConditions": "pidor", "snowDepth": "dep", "feedback": "hui"}' -H 'Content-Type: application/json'
+
+curl -X POST http://127.0.0.1:8000/api/image -F "file=@test.jpg" -H "Content-Type: multipart/form-data"
+
+curl http://127.0.0.1:8000/api/locas 

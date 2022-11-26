@@ -26,9 +26,14 @@ const FeedbackScreen = ({ route }) => {
 	useEffect(()=>{setLocPhoto(photo)}, [photo])
 
   const sendData = async () => {
+    let localUri = result.uri;
+    let filename = localUri.split('/').pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
     try {
 
-      const imageUrl = await sendPhoto(locPhoto);
+      const imageUrl = await sendPhoto(localUri, filename, type);
 
       const loca = {
         feedback: description,

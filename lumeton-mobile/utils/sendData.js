@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const sendPhoto = async (photo) => {
+const sendPhoto = async (uri, filename, type) => {
   const config = {
     headers: { "content-type": "multipart/form-data" },
   };
 
   let form = new FormData();
-  form.append("file", photo);
+  form.append("file", { uri: uri, name: filename, type: type });
 	
   try {
     console.log(form._parts);

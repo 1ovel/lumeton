@@ -1,0 +1,3 @@
+curl -X POST http://127.0.0.1:8000/api/loca -d '{"id": "test", "coordinates": {"lat": 12, "lon": 13}, "imageId": "test", "weatherConditions": "pidor", "snowDepth": "dep", "feedback": "hui"}' -H 'Content-Type: application/json'
+
+curl -X POST http://127.0.0.1:8000/api/image -F "file=@test.jpg" -H "Content-Type: multipart/form-data"

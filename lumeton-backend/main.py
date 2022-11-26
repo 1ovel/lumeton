@@ -4,10 +4,19 @@ from bson import json_util
 import json
 import utils
 import classes
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 coll = utils.db_connect()
 container_client = utils.azure_connect()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["172.20.10.3:19000", "*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Health Check route

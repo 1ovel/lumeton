@@ -12,6 +12,7 @@ const CameraScreen = ({ route }) => {
   const cameraRef = useRef();
   const navigation = useNavigation()
   
+	requestPermission()
 
   const takePicture = () => {
     if (!cameraRef.current) {

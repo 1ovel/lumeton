@@ -13,12 +13,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import ConditionsList from "../components/ConditionsList";
 import { iceConditions, snowConditions } from "../constants/conditions";
+import { sendLoca, sendPhoto } from "../utils/sendData";
+import axios from "axios";
 
 const FeedbackScreen = ({ route }) => {
   const { photo, location } = route.params;
   const [selectedSnowCondition, setSelectedSnowCondition] = useState(null);
   const [selectedIceCondition, setSelectedIceCondition] = useState(null);
   const [description, setDescription] = useState("");
+
+  const sendData = async () => {
+    // try {
+      fetch("http://localhost:8000/api/health")
+        .then((response) => console.log(response))
+        .catch((e) => console.log(e));
+      // const imageUrl = await sendPhoto(photo)
+      //
+      // const loca = {feedback: description, imageUrl, snowDepth: selectedSnowCondition, weatherConditions: selectedIceCondition}
+      //
+      // const savedLoca = await sendLoca(loca)
+      //
+      // return savedLoca
+    // } catch (e) {
+    //   console.error(e.message);
+    // }
+  };
 
   console.log(photo);
 
@@ -37,7 +56,10 @@ const FeedbackScreen = ({ route }) => {
                 overflow: "hidden",
               }}
             >
-              <Image source={{ uri: photo.uri }} style={{ flex: 1, resizeMode: 'cover' }} />
+              <Image
+                source={{ uri: photo.uri }}
+                style={{ flex: 1, resizeMode: "cover" }}
+              />
             </View>
           </View>
 
@@ -77,9 +99,7 @@ const FeedbackScreen = ({ route }) => {
           </View>
 
           <View>
-            <Text style={styles.titleText}>
-              Snow Level
-            </Text>
+            <Text style={styles.titleText}>Snow Level</Text>
             <ConditionsList
               conditions={snowConditions}
               setSelectedCondition={setSelectedSnowCondition}
@@ -87,9 +107,7 @@ const FeedbackScreen = ({ route }) => {
             />
           </View>
           <View>
-            <Text style={styles.titleText}>
-              Ice
-            </Text>
+            <Text style={styles.titleText}>Ice</Text>
             <ConditionsList
               conditions={iceConditions}
               setSelectedCondition={setSelectedIceCondition}
@@ -113,6 +131,7 @@ const FeedbackScreen = ({ route }) => {
           </View>
         </ScrollView>
         <TouchableOpacity
+          onPress={sendData}
           style={{
             width: "100%",
             height: 60,

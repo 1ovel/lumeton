@@ -35,3 +35,31 @@ def azure_connect():
     container_client = blob_service_client.get_container_client(container_name)
 
     return container_client
+
+# Using the Haversine formula to calculate the distance between two points on a sphere
+def measure(lat1, lon1, lat2, lon2):   
+    R = 6378.137
+    dLat = lat2 * math.pi / 180 - lat1 * math.pi / 180
+    dLon = lon2 * math.pi / 180 - lon1 * math.pi / 180
+    a = math.sin(dLat/2) * math.sin(dLat/2) + math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) *math.sin(dLon/2) * math.sin(dLon/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    d = R * c
+    return d * 1000
+def order_by_distance(item):
+    # Return the price, which is the second item within the tuple
+    return item.distance
+
+def assess_places(item):
+    mark = 0
+    with_org.sort(key=order_by_distance)
+    for i in range(3):
+        if with_org[i].distance <= 100:
+            mark += 1/3
+        elif with_org[i].distance > 100 and with_org[i].distance < 300:
+            mark +=  1/3 * (1 - ((with_org[i].distance - 100)*5/1000))
+    return mark
+    
+class Organization:
+    def __init__(self, org_id, distance):
+        self.org_id = org_id
+        self.distance = distance

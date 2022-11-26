@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { createRef, useRef, useState } from "react";
 import { Camera, CameraType } from "expo-camera";
-import cameraIcon from '../assets/cameraIcon.svg'
+import CameraIcon from "../assets/cameraIcon.svg";
 
 const CameraScreen = () => {
   const [cameraType, setCameraType] = useState(CameraType.back);
@@ -38,20 +38,25 @@ const CameraScreen = () => {
               justifyContent: "center",
               alignItems: "center",
               borderRadius: 10,
-              flexDirection: 'row'
             }}
           >
             {/* <Text style={{ color: 'white', fontWeight: '600', fontSize: 20 }}>Report</Text> */}
             {isLoading ? (
               <ActivityIndicator />
             ) : (
-              <View>
-              <Text style={{ color: "white", fontWeight: "600", fontSize: 20 }}>
-                Capture Snow
-              </Text>
-              <cameraIcon />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: 20,
+                    paddingRight: 10,
+                  }}
+                >
+                  Capture Snow
+                </Text>
+                <CameraIcon width={25} height={25} />
               </View>
-
             )}
           </TouchableOpacity>
         </View>

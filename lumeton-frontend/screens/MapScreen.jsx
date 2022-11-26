@@ -1,11 +1,14 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
+import NewFeedbackIcon from '../assets/newFeedbackIcon.svg'
+import { useNavigation } from "@react-navigation/native";
 
 const MapScreen = () => {
   const [location, setLocation] = useState(null);
+  const navigation = useNavigation()
   
   useEffect(() => {
     (async () => {
@@ -63,6 +66,44 @@ const MapScreen = () => {
           />
         )}
       </MapView>
+      <View style={{ position: 'absolute', height: '100%', width: '100%', zIndex: 20 }}>
+      <View style={{ height: "87%" }} />
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Camera')}
+            style={{
+              width: "85%",
+              height: 60,
+              backgroundColor: "#003380",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 10,
+            }}
+          >
+            {/* <Text style={{ color: 'white', fontWeight: '600', fontSize: 20 }}>Report</Text> */}
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: 20,
+                    paddingRight: 10,
+                  }}
+                >
+                  Make a report
+                </Text>
+                <NewFeedbackIcon width={30} height={30} />
+              </View>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -73,6 +114,7 @@ const styles = StyleSheet.create({
     flex: 1, //the container will fill the whole screen.
     justifyContent: "flex-end",
     alignItems: "center",
+    position: 'relative'
   },
   map: {
     ...StyleSheet.absoluteFillObject,

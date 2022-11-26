@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import CameraScreen from "./screens/CameraScreen";
+import FeedbackScreen from "./screens/FeedbackScreen";
 import MapScreen from "./screens/MapScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 
@@ -13,8 +14,10 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Registration"
+        initialRouteName="Feedback"
       >
+        <Stack.Screen name="Feedback" component={FeedbackScreen} />
+        <Stack.Screen name="Camera" component={CameraScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
       </Stack.Navigator>

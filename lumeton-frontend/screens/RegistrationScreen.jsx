@@ -67,9 +67,6 @@ const s = StyleSheet.create({
     marginVertical:20,
     alignItems: "center",
   }
-  continueButton:{
-    
-  }
 });
 
 export default RegistrationScreen;

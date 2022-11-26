@@ -11,14 +11,15 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Camera">
-          <Stack.Screen name="Map" component={MapScreen} />
-          <Stack.Screen name="Registration" component={RegistrationScreen} />
-          <Stack.Screen name="Camera" component={CameraScreen} />
-        </Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="Registration"
+      >
+        <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
+      </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
-
   );
 }
 

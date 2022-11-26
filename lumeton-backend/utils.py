@@ -1,20 +1,23 @@
-from azure.identity import DefaultAzureCredential
-
 import pymongo as pym
 import certifi
-from fastapi import FastAPI, File, UploadFile
-from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+from fastapi import UploadFile
+from azure.storage.blob import BlobServiceClient
+
 
 # Function to upload an image file to Azure Storage Account
-async def uploadtoazure(file: UploadFile, file_name: str, file_type: str, container_client):
+async def uploadtoazure(file: UploadFile,
+                        file_name: str,
+                        file_type: str,
+                        container_client):
     try:
         blob_client = container_client.get_blob_client(file_name)
         f = await file.read()
-        result = blob_client.upload_blob(f)
+        blob_client.upload_blob(f)
         return blob_client.url
     except Exception as e:
         print(e)
-        return "problemes with saving photo to Azure"
+        return "problems with saving photo to Azure"
+
 
 # Connecting to MongoDB, returns db
 def db_connect():

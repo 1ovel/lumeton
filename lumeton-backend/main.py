@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import Response, JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -10,48 +9,13 @@ import pymongo as pym
 import certifi
 from bson import json_util
 import json
+import utils
+import classes
 
 app = FastAPI()
+coll = utils.db_connect()
+container_client = utils.azure_connect()
 
-# Connecting to MongoDB, returns db
-def db_connect():
-    connection = pym.MongoClient("mongodb+srv://paskaton:kw9GEv46BW3Y7uc8@paskaton.gs0y8gx.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
-    db = connection['paskaton']
-    collection = db['p_collection']
-    return collection
-
-coll = db_connect()
-    
-# Connecting to Azure Storage Account
-try:
-    connect_str = "DefaultEndpointsProtocol=https;AccountName=paskaton;AccountKey=Qc2LVMB+cKzM6RK+uYhFtVHYDWuQFMDQvdMX7KqXf7m/TTNbrxjh8LsEFjUYsC1sp7rvJ35Duzjg+AStJl8Ysg==;EndpointSuffix=core.windows.net" # os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-    blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-    container_name = "paskatoncontainer"
-    container_client = blob_service_client.get_container_client(container_name)
-except Exception as e:
-    print(e)
-
-# Function to upload an image file to Azure Storage Account
-async def uploadtoazure(file: UploadFile, file_name: str, file_type: str):
-    try:
-        blob_client = container_client.get_blob_client(file_name)
-        f = await file.read()
-        result = blob_client.upload_blob(f)
-        return blob_client.url
-    except Exception as e:
-        print(e)
-        return "problemes with saving photo to Azure"
-
-class Coordinates(BaseModel):
-    lat: float
-    lon: float
-
-class Loca(BaseModel):
-    coordinates: Coordinates
-    imageUrl: str
-    weatherConditions: str
-    snowDepth: str | None = None
-    feedback: str | None = None
 
 # Health Check route
 @app.get("/api/health")
@@ -63,11 +27,11 @@ def read_root():
 async def save_image(file: UploadFile):
     file.filename = f"{uuid.uuid4()}.jpg"
 
-    return await uploadtoazure(file, file.filename, file.content_type)
+    return await utils.uploadtoazure(file, file.filename, file.content_type, container_client)
 
 # Save a new Locations
 @app.post("/api/loca")
-async def save_item(loca: Loca):
+async def save_item(loca: classes.Loca):
     loca.coordinates = dict(loca.coordinates)
 
     inserted_id= coll.insert_one(dict(loca))

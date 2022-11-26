@@ -70,15 +70,16 @@ async def save_image(file: UploadFile):
 async def save_item(loca: Loca):
     loca.coordinates = dict(loca.coordinates)
 
-    inserted = coll.insert_one(dict(loca))
+    inserted_id= coll.insert_one(dict(loca))
 
-    response = coll.find_one({"_id": inserted.inserted_id})
+    response = coll.find_one({"_id": inserted_id.inserted_id})
 
-    response = json.loads(json_util.dumps(response))
-    return response
+    return json.loads(json_util.dumps(response))
 
 
 # Return a list of Locations with bad weather conditions
-# @app.get("/api/locas")
-# def read_item(item_id: int, q: Union[str, None] = None):
-#     return {"item_id": item_id, "q": q}
+@app.get("/api/locas")
+def read_item():
+    docs = coll.find({})
+
+    return json.loads(json_util.dumps(docs))

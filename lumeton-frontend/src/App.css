@@ -1,0 +1,31 @@
+.App {
+  text-align: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: aquamarine;
+  position: relative;
+}
+
+.overflowContainer {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  pointer-events: none
+}
+
+.itemContainer {
+  width: 30vw;
+  height: 70vh;
+  background-color: white;
+  margin-left: 2vw;
+  margin-top: 5vh;
+  border-radius: 10px;
+  border-width: 2;
+  border-color: rgba(0, 0, 0, 0.119);
+  border-style: solid;
+  pointer-events: all;
+  padding: 30px;
+  text-align: left;
+}
+

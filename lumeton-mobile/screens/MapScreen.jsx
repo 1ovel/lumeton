@@ -38,6 +38,7 @@ const MapScreen = () => {
     <View style={styles.container}>
       <MapView
         style={styles.map}
+        zoomEnabled={false}
         //specify our coordinates.
         provider={PROVIDER_GOOGLE}
         initialRegion={{
@@ -66,8 +67,7 @@ const MapScreen = () => {
           />
         )}
       </MapView>
-      <View style={{ position: 'absolute', height: '100%', width: '100%', zIndex: 20 }}>
-      <View style={{ height: "87%" }} />
+      <View style={{ position: 'absolute', width: '100%', zIndex: 20, bottom: 30 }}>
         <View
           style={{
             width: "100%",
@@ -77,7 +77,9 @@ const MapScreen = () => {
           }}
         >
           <TouchableOpacity
-            onPress={() => navigation.navigate('Camera')}
+            onPress={() => {
+              navigation.navigate('Camera', { location: location })
+            }}
             style={{
               width: "85%",
               height: 60,
@@ -114,7 +116,6 @@ const styles = StyleSheet.create({
     flex: 1, //the container will fill the whole screen.
     justifyContent: "flex-end",
     alignItems: "center",
-    position: 'relative'
   },
   map: {
     ...StyleSheet.absoluteFillObject,

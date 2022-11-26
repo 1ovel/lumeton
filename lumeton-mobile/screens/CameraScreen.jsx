@@ -2,19 +2,25 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { createRef, useRef, useState } from "react";
 import { Camera, CameraType } from "expo-camera";
 import CameraIcon from "../assets/cameraIcon.svg";
+import { useNavigation } from "@react-navigation/native";
 
-const CameraScreen = () => {
+const CameraScreen = ({ route }) => {
+  const { location } = route.params
   const [cameraType, setCameraType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [isLoading, setIsLoading] = useState(false);
   const cameraRef = useRef();
+  const navigation = useNavigation()
+  
 
   const takePicture = () => {
     if (!cameraRef.current) {
       console.log("asd");
       return;
     }
-    cameraRef.current.takePictureAsync();
+    cameraRef.current.takePictureAsync({ onPictureSaved: (photo) => {
+      navigation.navigate('Feedback', { photo: photo, location: location })
+    }});
   };
 
   return (

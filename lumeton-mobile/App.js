@@ -14,7 +14,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Feedback"
+        initialRouteName="Map"
       >
         <Stack.Screen name="Feedback" component={FeedbackScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />

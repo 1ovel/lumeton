@@ -7,26 +7,28 @@ const sendPhoto = async (uri, filename, type) => {
 
   let form = new FormData();
   form.append("file", { uri: uri, name: filename, type: type });
-
+	
   try {
+    console.log(form);
     const photoUrl = await axios.post(
       "https://rotten-mails-battle-93-106-187-207.loca.lt/api/image",
       form,
       config
     );
 
-    return photoUrl.data;
+		console.log(photoUrl)
+
+    return photoUrl;
   } catch (e) {
     console.log(e.message);
   }
+  // return photourl;
 };
 
 const sendLoca = async (loca) => {
-  const config = { headers: { "content-type": "application/json" } };
   return await axios.post(
     "https://rotten-mails-battle-93-106-187-207.loca.lt/api/loca",
-    loca,
-    config
+    loca
   );
 };
 

@@ -14,25 +14,25 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import ConditionsList from "../components/ConditionsList";
 import { iceConditions, snowConditions } from "../constants/conditions";
 import { sendLoca, sendPhoto } from "../utils/sendData";
-import axios from "axios";
 
 const FeedbackScreen = ({ route }) => {
   const { photo, location } = route.params;
   const [selectedSnowCondition, setSelectedSnowCondition] = useState(null);
   const [selectedIceCondition, setSelectedIceCondition] = useState(null);
   const [description, setDescription] = useState("");
-	const [locPhoto, setLocPhoto] = useState(null)
+  const [locPhoto, setLocPhoto] = useState(null);
 
-	useEffect(()=>{setLocPhoto(photo)}, [photo])
+  useEffect(() => {
+    setLocPhoto(photo);
+  }, [photo]);
 
   const sendData = async () => {
-    let localUri = result.uri;
-    let filename = localUri.split('/').pop();
+    let localUri = locPhoto.uri;
+    let filename = localUri.split("/").pop();
     let match = /\.(\w+)$/.exec(filename);
     let type = match ? `image/${match[1]}` : `image`;
 
     try {
-
       const imageUrl = await sendPhoto(localUri, filename, type);
 
       const loca = {
@@ -40,11 +40,12 @@ const FeedbackScreen = ({ route }) => {
         imageUrl,
         snowDepth: selectedSnowCondition,
         weatherConditions: selectedIceCondition,
+        coordinates: { lat: location.latitude, lon: location.longitude },
       };
 
       const savedLoca = await sendLoca(loca);
 
-      return savedLoca;
+      console.log(savedLoca);
     } catch (e) {
       console.error(e.message);
     }
@@ -135,7 +136,7 @@ const FeedbackScreen = ({ route }) => {
                 padding: 20,
               }}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChangeText={(e) => setDescription(e)}
             />
           </View>
         </ScrollView>

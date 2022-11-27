@@ -86,7 +86,7 @@ def data_summary():
     main_feedback = []
     # assessment criteria such as user measure are random since we don't have the data regardin the depth of the snow or the amount of ice. Road class measure could be extracted, however, there was not enough time to do that. 
     for feedback_instance in actual_feedback:
-        main_feedback.append({"feedback_id":uuid.uuid4, "lat":feedback_instance['Lat'], "lon":feedback_instance['Lon'], "user_measure":random.random(), "snow_depth":random.randint(2, 50), "ice":random.randint(1,3), "road_class_measure":random.random()*1.5, "description":feedback_instance['Message']})
+        main_feedback.append({"feedback_id":uuid.uuid4(), "lat":feedback_instance['Lat'], "lon":feedback_instance['Lon'], "user_measure":random.random(), "snow_depth":random.randint(2, 50), "ice":random.randint(1,3), "road_class_measure":random.random()*1.5, "description":feedback_instance['Message']})
     access_points = np.array(list((place['latitude'], place['longitude']) for place in accessibility_critical))
     bus_points = np.array(list((place['lat'], place['lon']) for place in hsl_bus_stops))
         

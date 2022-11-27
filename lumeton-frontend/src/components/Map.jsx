@@ -14,21 +14,6 @@ const center = {
   lng: 24.93626160750431,
 };
 
-function val2heat(perc) {
-  var r, g, b = 0;
-  if (perc < 50) {
-      r = 255;
-      g = Math.round(5.1 * perc);
-  }
-  else {
-      g = 255;
-      r = Math.round(510 - 5.10 * perc);
-  }
-  var h = r * 0x10000 + g * 0x100 + b * 0x1;
-  console.log(('000000' + h.toString(16)).slice(-6))
-  return  ('000000' + h.toString(16)).slice(-6);
-}
-
 function MapComponent() {
   const [selectedItem, setSelectedItem] = useState(null);
   const { isLoaded } = useJsApiLoader({
@@ -40,7 +25,6 @@ function MapComponent() {
   React.useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/summary').then((response) => {
       setSummary(response.data);
-      console.log(response.data)
     });
   }, []);
 
@@ -48,19 +32,20 @@ function MapComponent() {
     <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
       {summary.map(item=>
       <Marker
-        onClick={() => setSelectedItem()}
+        onClick={() => setSelectedItem(item.feedback_id)}
         position={{
           lng: item.lon,
           lat: item.lat,
+        }} 
+             icon={{
+          url: `https://strona.agency/photos/circ_${String(item.final_urgency).slice(0,3)}.png`
         }}
-        icon={{
-          url: `https://api.iconify.design/ic/round-circle.svg?color=%23${val2heat(item.final_urgency)}&width=30&height=30`,
-        }}
+
         label={{ text: `${item.final_urgency}`.slice(0,3), color: "#ffffff" }}
       />
         )}
       
-      <SelectedItem selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
+      <SelectedItem summary={summary} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
     </GoogleMap>
   ) : (
     <></>

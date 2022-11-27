@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-const SelectedItem = ({ selectedItem, setSelectedItem }) => {
+const SelectedItem = ({ summary, selectedItem, setSelectedItem }) => {
   const imageUrl =
     "https://images2.minutemediacdn.com/image/upload/c_fill,w_720,ar_16:9,f_auto,q_auto,g_auto/shape/cover/sport/655245-jrodav-gettyimages-541575344-72c6bf07c89e03947d92dc69cadd5fa6.jpg";
   return (

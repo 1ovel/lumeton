@@ -16,7 +16,7 @@
 
 .itemContainer {
   width: 30vw;
-  height: 70vh;
+  min-height: 70vh;
   background-color: white;
   margin-left: 2vw;
   margin-top: 5vh;

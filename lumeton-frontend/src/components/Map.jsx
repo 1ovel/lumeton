@@ -45,7 +45,9 @@ function MapComponent() {
       />
         )}
       
-      <SelectedItem summary={summary} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
+      <SelectedItem summary={summary.find(obj => {
+  return obj.feedback_id === selectedItem
+})} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
     </GoogleMap>
   ) : (
     <></>

@@ -11,27 +11,30 @@ const SelectedItem = ({ summary, selectedItem, setSelectedItem }) => {
         <div className="itemContainer">
           <div className="wrapper">
             <h2>Feedback</h2>
+            <h6>id: {summary.feedback_id}</h6>
             <div className="row">
               <div className="itemProperty">
-                <p className="propValue">3</p>
+                <p className="propValue">{String(summary.final_urgency).slice(0,6)}</p>
                 <p className="propTitle">Importance rating</p>
               </div>
               <div className="itemProperty">
-                <p className="propValue">3m</p>
+                <p className="propValue">{summary.snow_depth}</p>
                 <p className="propTitle">
                   Snow <br /> depth
                 </p>
               </div>
               <div className="itemProperty">
-                <p className="propValue">Ice</p>
-                <p className="propTitle">Black ice</p>
+                <p className="propValue"> Ice
+                <p className="propTitle">
+                  {summary.ice == "0" ? "No ice" : summary.ice == "1" ? "Black ice" : "Hidden ice"}</p>
+</p>
               </div>
             </div>
             <img src={imageUrl} className="image" />
             <p>
               <b>Description</b>
               <br />
-              Good pile of snow
+              {summary.description}
             </p>
             <div className="closeContainer" onClick={() => setSelectedItem(null)}>
               <Icon icon="maki:cross" />

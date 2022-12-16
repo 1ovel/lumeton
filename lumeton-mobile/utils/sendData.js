@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const url = "https://mighty-spoons-cry-93-106-151-171.loca.lt"
+
 const sendPhoto = async (uri, filename, type) => {
   const config = {
     headers: { "content-type": "multipart/form-data" },
@@ -10,7 +12,7 @@ const sendPhoto = async (uri, filename, type) => {
 
   try {
     const photoUrl = await axios.post(
-      "https://rotten-mails-battle-93-106-187-207.loca.lt/api/image",
+      url + "/api/image",
       form,
       config
     );
@@ -24,7 +26,7 @@ const sendPhoto = async (uri, filename, type) => {
 const sendLoca = async (loca) => {
   const config = { headers: { "content-type": "application/json" } };
   return await axios.post(
-    "https://rotten-mails-battle-93-106-187-207.loca.lt/api/loca",
+    url + "/api/loca",
     loca,
     config
   );

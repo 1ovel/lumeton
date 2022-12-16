@@ -44,8 +44,9 @@
 
 .propValue {
   color: #003380;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold;
+	text-align: center;
 }
 
 .propTitle {
@@ -70,6 +71,8 @@ p {
   width: 100%;
   flex: 1;
   border-radius: 5px;
+	max-height: 300px;
+	object-fit: cover;
 }
 
 .closeContainer {

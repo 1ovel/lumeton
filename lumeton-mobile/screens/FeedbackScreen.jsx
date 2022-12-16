@@ -14,6 +14,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import ConditionsList from "../components/ConditionsList";
 import { iceConditions, snowConditions } from "../constants/conditions";
 import { sendLoca, sendPhoto } from "../utils/sendData";
+import { useNavigation } from "@react-navigation/native";
 
 const FeedbackScreen = ({ route }) => {
   const { photo, location } = route.params;
@@ -21,12 +22,15 @@ const FeedbackScreen = ({ route }) => {
   const [selectedIceCondition, setSelectedIceCondition] = useState(null);
   const [description, setDescription] = useState("");
   const [locPhoto, setLocPhoto] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const navigation = useNavigation()
 
   useEffect(() => {
     setLocPhoto(photo);
   }, [photo]);
 
   const sendData = async () => {
+		setLoading(true)
     let localUri = locPhoto.uri;
     let filename = localUri.split("/").pop();
     let match = /\.(\w+)$/.exec(filename);
@@ -44,6 +48,9 @@ const FeedbackScreen = ({ route }) => {
       };
 
       const savedLoca = await sendLoca(loca);
+
+			setLoading(false)
+			navigation.navigate("Map")
 
       console.log(savedLoca);
     } catch (e) {
@@ -161,7 +168,7 @@ const FeedbackScreen = ({ route }) => {
                 paddingRight: 10,
               }}
             >
-              Send
+							{loading ? "Sending..." : "Send"}
             </Text>
           </View>
         </TouchableOpacity>
